@@ -1,0 +1,35 @@
+﻿@page
+@model Courses_Distribution_System.Pages.Manage.Departments.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Departments</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Department
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Department) {
+        <tr>
+            <td>
+                @(item)
+            </td>
+            <td class="d-flex justify-content-around">
+                <a asp-page="./Edit" asp-route-id="@item">Edit</a> |
+                <form method="post">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <input type="hidden" value="@item" name="name"/>
+                </form>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

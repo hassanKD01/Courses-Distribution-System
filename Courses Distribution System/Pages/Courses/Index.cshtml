@@ -1,0 +1,18 @@
+﻿@page
+@model Courses_Distribution_System.Pages.Courses.IndexModel
+@{
+}
+<h2>Choose the semester :</h2>
+
+<ul class="Main">
+
+    @for (int i = 1; i <= 10; i++)
+    {
+        <a class="Text" asp-page="./Semester" asp-route-semester="@i">
+            <li class="card SemesterClass">
+                @i
+            </li>
+        </a>
+    }
+
+</ul>

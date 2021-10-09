@@ -1,0 +1,88 @@
+﻿@page
+@model Courses_Distribution_System.Pages.Professors.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<div class="d-flex justify-content-between">
+    <a asp-action="./Index" asp-route-archived="@(!(bool)ViewData["Archived"])">
+        @if ((bool)ViewData["Archived"])
+        {
+            <span>Get Professors</span>
+        }
+        else
+        {
+            <span>Get archived professors</span>
+        }
+    </a>
+    <form asp-action="Index" method="get">
+        <div class="form-actions">
+            <p>
+                Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                <input type="hidden" name="archived" value="@ViewData["Archived"].ToString()" />
+                <input type="submit" value="Search" class="btn btn-primary" /> |
+                <a asp-action="Index">Back to Full List</a>
+            </p>
+        </div>
+    </form>
+</div>
+@{ string archived = (bool)ViewData["Archived"] ? "Unarchive" : "Archive";}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParm"]" asp-route-archived="@(ViewData["Archived"])">
+                    @Html.DisplayNameFor(model => model.Professor[0].Id)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-archived="@(ViewData["Archived"])">
+                    @Html.DisplayNameFor(model => model.Professor[0].Name)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Professor[0].Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Professor[0].PhoneNumber)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Professor)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td class="d-flex justify-content-around">
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                    <form method="post">
+                        <input type="hidden" asp-for="archive" value="@item.Archived" />
+                        <input type="hidden" asp-for="id" value="@item.Id" />
+                        <button type="submit" class="btn btn-primary">
+                            @archived
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

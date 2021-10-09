@@ -1,0 +1,228 @@
+﻿@page 
+@model Courses_Distribution_System.Pages.Sections.IndexModel
+@{
+}
+
+<div class="d-flex justify-content-between" style="padding:1%">
+    <a class="btn btn-primary" asp-page-handler="ExportCourses" asp-route-academicYear="@ViewData["AcademicYear"]">
+        Generate Distribution By Course
+    </a>
+    <a class="btn btn-primary" asp-page-handler="ExportProfessors" asp-route-academicYear="@ViewData["AcademicYear"]">
+        Generate Distribution By Professor
+    </a>
+</div>
+<form asp-page="Index" class="row justify-content-between" method="get">
+    <div class="form-actions">
+        <p>
+            Find by code: <input asp-for="searchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-page="Index" asp-route-academicYear="@ViewData["AcademicYear"]">
+                Back to Full List
+            </a>
+        </p>
+    </div>
+    <div class="form-actions">
+        <p>
+            Academic Year: <input asp-for="AcademicYear" value="@ViewData["AcademicYear"]" id="academic-year" oninput="validate()"/>
+            <input type="submit" value="Get sections" class="btn btn-primary" />
+        </p>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="Index" asp-route-sortOrder="@ViewData["CodeSortParm"]" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-academicYear="@ViewData["AcademicYear"]">
+                    @Html.DisplayNameFor(model => model.Courses[0].Code)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Courses[0].Language)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Courses[0].Credits)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Courses[0].CourseHours)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Courses[0].TpHours)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Courses[0].TdHours)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{var i = 0;}
+        @foreach (var item in Model.Courses)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => item.Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.Language)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.Credits)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.CourseHours)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.TpHours)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.TdHours)
+                </td>
+                <td class="row">
+                     <a title="Add section" class="add-button" href="javascript:add(@item.Id,'@item.Code')">+</a>
+                    @if (item.Sections.Count() > 0) { 
+                        <button title="Show sections" class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#@("sections"+i)"></button>
+                     }
+                </td>
+            </tr>
+            @if (item.Sections.Count() > 0)
+            {
+                <tr>
+                    <td colspan="7" class="hiddenRow">
+                        <div class="accordian-body collapse flex-column" id="@("sections"+i)">
+                            @foreach (var sections in item.Sections)
+                            {
+                            <div id="@("section"+sections.Id)" class="section align-items-center">
+                                <span> @sections.Name </span>
+                                <span>@sections.ProfName</span>
+                                <span>@sections.CourseHours</span>
+                                <span>@sections.TpHours</span>
+                                <span>@sections.TdHours</span>
+                                <form method="post" asp-page-handler="Delete" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-academicYear="@ViewData["AcademicYear"]">
+                                    <button type="submit" class="btn-danger btn">Delete</button>
+                                    <input type="hidden" value="@sections.Id" asp-for="Id"/>
+                                    <a id="edit" class="btn btn-primary" value="@sections.Id">Edit</a>
+                                </form>
+                            </div>
+                            <form method="post" asp-page-handler="Update" id="@("edit"+sections.Id)" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-academicYear="@ViewData["AcademicYear"]" class="section align-items-center" style="display:none">
+                                <input value="@sections.Name" asp-for="Update.Name" />
+                                <select asp-for="Update.ProfessorId">
+                                    @foreach (var prof in Model.Professors)
+                                    {
+                                        <option value="@prof.Id">@prof.Name</option>
+                                    }
+                                </select>
+                                <input value="@sections.CourseHours" asp-for="Update.CourseHours"  required/>
+                                <input value="@sections.TpHours" asp-for="Update.TpHours" required/>
+                                <input value="@sections.TdHours" asp-for="Update.TdHours" required/>
+                                <input value="@ViewData["AcademicYear"]" asp-for="Update.AcademicYear" required/>
+                                <input type="hidden" value="@sections.Id" asp-for="Update.Id" required/>
+                                <input type="hidden" value="@item.Id" asp-for="Update.CourseId" required/>
+                                <div>
+                                    <button type="submit" class="btn btn-success">Confirm</button>
+                                    <a id="cancel" class="btn-danger btn" value="@sections.Id">Cancel</a>
+                                </div>
+                            </form>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+            i++;
+        }
+</table>
+<article id="add" class="form add text-center" style=" top: 20%;">
+    <form method="post" asp-page-handler="Add" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-academicYear="@ViewData["AcademicYear"]">
+        <div id="addheader" class="flex-row justify-content-between">
+            <b></b>
+            <a id="close" class="text-danger float-right">close</a>
+        </div>
+        <hr />
+        <div class="form-control-custom">
+            <label asp-for="Input.Name"></label>
+            <input asp-for="Input.Name" />
+        </div>
+        <div class="form-control-custom">
+            <label asp-for="Input.CourseHours"></label>
+            <input asp-for="Input.CourseHours" />
+        </div>
+        <div class="form-control-custom">
+            <label asp-for="Input.TdHours"></label>
+            <input asp-for="Input.TdHours" />
+        </div>
+        <div class="form-control-custom">
+            <label asp-for="Input.TpHours"></label>
+            <input asp-for="Input.TpHours" />
+        </div>
+        <div class="form-control-custom">
+            <label asp-for="Input.ProfessorId"></label>
+            <select asp-for="Input.ProfessorId">
+                @foreach (var item in Model.Professors)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
+        </div>
+
+        <button type='submit' class='btn'>
+            Add
+        </button>
+        <input type="hidden" class="courseID" asp-for="Input.CourseId" />
+    </form>
+</article>
+
+@section scripts{ 
+<script>
+    $(function () {
+        $("a[id='edit']").on("click", function (e) {
+            $("#section" + $(e.target).attr("value")).hide();
+            $("#edit" + $(e.target).attr("value")).show();
+            $("a[id='cancel']").on("click", function (e) {
+                $("#section" + $(e.target).attr("value")).show();
+                $("#edit" + $(e.target).attr("value")).hide();
+            })
+        })
+    })
+    dragElement(document.getElementById("add"));
+
+    function dragElement(elmnt) {
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        if (document.getElementById(elmnt.id + "header")) {
+            // if present, the header is where you move the DIV from:
+            document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+        } else {
+            // otherwise, move the DIV from anywhere inside the DIV:
+            elmnt.onmousedown = dragMouseDown;
+        }
+
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // get the mouse cursor position at startup:
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            // call a function whenever the cursor moves:
+            document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // calculate the new cursor position:
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            // set the element's new position:
+            elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+            elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        }
+
+        function closeDragElement() {
+            // stop moving when mouse button is released:
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }
+</script>
+}

@@ -1,0 +1,93 @@
+﻿@page
+@model Courses_Distribution_System.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container">
+    <ul class ="nav nav-tabs">
+        <li id="forms-list">
+            <div class="d-flex justify-content-center">
+                <a id="login-hod" href="#" class="nav-link active">Head of Department</a>
+                <a id="login-admin" href="#" class="nav-link">Admin</a>
+            </div>
+            <div id="hod" class="text-center">
+                <section class="form">
+                    <form id="account" method="post">
+                        <h4>Login</h4>
+                        <hr />
+                        <div class="form-control-custom">
+                            <label asp-for="Input.DepartmentName"></label>
+                            <select asp-for="Input.DepartmentName">
+                                @foreach (var department in Model.Departments)
+                                {
+                                    <option>@department</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-control-custom">
+                            <label asp-for="Input.Password"></label>
+                            <input asp-for="Input.Password" />
+                        </div>
+                        <button type="submit" class="btn">Login</button>
+                        <div asp-validation-summary="All"></div>
+                    </form>
+                </section>
+            </div>
+            <div id="admin" class="text-center">
+                <section class="form">
+                    <form asp-page-handler="Admin" id="account" method="post">
+                        <h4>Login</h4>
+                        <hr />
+                        <div class="form-control-custom">
+                            <label asp-for="AdminInput.Name"></label>
+                            <input asp-for="AdminInput.Name" />
+                        </div>
+                        <div class="form-control-custom">
+                            <label asp-for="AdminInput.Password"></label>
+                            <input asp-for="AdminInput.Password" />
+                        </div>
+                        <button type="submit" class="btn">Login</button>
+                        <div asp-validation-summary="All"></div>
+                    </form>
+                </section>
+            </div>
+        </li>
+        </ul>
+</div>
+@section scripts{ 
+<script>
+    var adminForm = document.getElementById("admin");
+    var hodForm = document.getElementById("hod");
+    adminForm.remove();
+    $("#login-admin").on("click", function () {
+        this.classList.add("active");
+        $("#forms-list").append(adminForm);
+        hodForm.remove();
+        $("#login-hod").removeClass("active");
+        buttonToggle();
+    })
+    $("#login-hod").on("click", function () {
+        this.classList.add("active");
+        $("#forms-list").append(hodForm);
+        adminForm.remove();
+        $("#login-admin").removeClass("active");
+    })
+    buttonToggle();
+    function buttonToggle() {
+        $('.btn').attr('disabled', 'disabled');
+        $('.form-control-custom input').on('keyup', function () {
+            let empty = false;
+
+            $('.form-control-custom input').each(function () {
+                empty = $(this).val().length == 0;
+            });
+
+            if (empty)
+                $('.btn').attr('disabled', 'disabled');
+            else
+                $('.btn').attr('disabled', false);
+        });
+    };
+</script>
+}

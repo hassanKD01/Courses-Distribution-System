@@ -1,0 +1,70 @@
+﻿@page "{semester:int}"
+@model Courses_Distribution_System.Pages.Courses.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Course</h4>
+<hr />
+<form method="post" class="creat-form" asp-route-semester="@Model.Semester">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Course.Code" class="control-label"></label>
+        <input asp-for="Course.Code" class="form-control" />
+        <span asp-validation-for="Course.Code" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Course.Credits" class="control-label"></label>
+        <input asp-for="Course.Credits" class="form-control" />
+        <span asp-validation-for="Course.Credits" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Course.Language" class="control-label"></label>:
+        <div class="form-control">
+            <input type="radio" id="french" value="F" asp-for="Course.Language" />French
+            <input type="radio" id="english" value="E" asp-for="Course.Language" />English
+            <span asp-validation-for="Course.Language" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Course.Description" class="control-label"></label>
+        <input asp-for="Course.Description" class="form-control" />
+        <span asp-validation-for="Course.Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Course.CoursesHours" class="control-label"></label>
+        <input asp-for="Course.CoursesHours" class="form-control" />
+        <span asp-validation-for="Course.CoursesHours" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Course.TpHours" class="control-label"></label>
+        <input asp-for="Course.TpHours" class="form-control" />
+        <span asp-validation-for="Course.TpHours" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Course.TdHours" class="control-label"></label>
+        <input asp-for="Course.TdHours" class="form-control" />
+        <span asp-validation-for="Course.TdHours" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Course.Optional" class="control-label"></label>
+        <div class="form-control">
+            <input asp-for="Course.Optional" />
+            <span asp-validation-for="Course.Optional" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-page="Semester" asp-route-semester="@Model.Semester">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,82 @@
+﻿@page
+@model Courses_Distribution_System.Pages.Professors.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Professor</h4>
+    <hr />
+    <form method="post">
+        <input type="hidden" asp-for="Professor.Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+    </form>
+    <div class="creat-form">
+        <div>
+            <b>
+                Name:
+            </b>
+            @(Model.Professor.FirstName
+        +" "+Model.Professor.MiddleName
+        + " "+ Model.Professor.LastName)
+        </div>
+        <div>
+            <b>
+                @Html.DisplayNameFor(model => model.Professor.Email):
+            </b>
+            @Html.DisplayFor(model => model.Professor.Email)
+        </div>
+        <div>
+            <b>
+                @Html.DisplayNameFor(model => model.Professor.BackupEmail):
+            </b>
+            @Html.DisplayFor(model => model.Professor.BackupEmail)
+        </div>
+        <div>
+            <b>
+                @Html.DisplayNameFor(model => model.Professor.PhoneNumber):
+            </b>
+
+            @Html.DisplayFor(model => model.Professor.PhoneNumber)
+        </div>
+        <div>
+            <b>
+                @Html.DisplayNameFor(model => model.Professor.BackupPhoneNumber):
+            </b>
+            @Html.DisplayFor(model => model.Professor.BackupPhoneNumber)
+        </div>
+        <div>
+            <b>
+                @Html.DisplayNameFor(model => model.Professor.AcademicRank):
+            </b>
+            @Html.DisplayFor(model => model.Professor.AcademicRank)
+        </div>
+        <div>
+            <b>
+                @Html.DisplayNameFor(model => model.Professor.Contract):
+            </b>
+            @Html.DisplayFor(model => model.Professor.Contract)
+        </div>
+        @for (int i = 0; i < Model.Professor.ProfessorHours.Count; i++)
+        {
+            <div>
+                <b>@Html.DisplayFor(model=> model.Professor.ProfessorHours[i].AcademicYear)</b>
+                <div>
+                    <b>@Html.DisplayNameFor(model => model.Professor.ProfessorHours[i].MaxHours)</b>:
+                    @Html.DisplayFor(model => model.Professor.ProfessorHours[i].MaxHours)
+                </div>
+                <div>
+                    <b>@Html.DisplayNameFor(model => model.Professor.ProfessorHours[i].MinHours)</b>:
+                    @Html.DisplayFor(model => model.Professor.ProfessorHours[i].MinHours)
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Professor.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

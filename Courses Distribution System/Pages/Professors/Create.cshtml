@@ -1,0 +1,107 @@
+﻿@page
+@model Courses_Distribution_System.Pages.Professors.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Professor</h4>
+<hr />
+<form method="post" class="creat-form">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Professor.Id" class="control-label"></label>
+        <input asp-for="Professor.Id" class="form-control" />
+        <span asp-validation-for="Professor.Id" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Professor.FirstName" class="control-label"></label>
+        <input asp-for="Professor.FirstName" class="form-control" />
+        <span asp-validation-for="Professor.FirstName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Professor.MiddleName" class="control-label"></label>
+        <input asp-for="Professor.MiddleName" class="form-control" />
+        <span asp-validation-for="Professor.MiddleName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Professor.LastName" class="control-label"></label>
+        <input asp-for="Professor.LastName" class="form-control" />
+        <span asp-validation-for="Professor.LastName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Professor.Email" class="control-label"></label>
+        <input asp-for="Professor.Email" class="form-control" />
+        <span asp-validation-for="Professor.Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Professor.BackupEmail" class="control-label"></label>
+        <input asp-for="Professor.BackupEmail" class="form-control" />
+        <span asp-validation-for="Professor.BackupEmail" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Professor.PhoneNumber" class="control-label"></label>
+        <input asp-for="Professor.PhoneNumber" class="form-control" />
+        <span asp-validation-for="Professor.PhoneNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Professor.BackupPhoneNumber" class="control-label"></label>
+        <input asp-for="Professor.BackupPhoneNumber" class="form-control" />
+        <span asp-validation-for="Professor.BackupPhoneNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Professor.AcademicRank" class="control-label"></label>
+        <select asp-for="Professor.AcademicRank" class="form-control">
+            @foreach (var rank in Data.Constants.Ranks)
+            {
+                <option>@rank</option>
+            }
+        </select>
+        <span asp-validation-for="Professor.AcademicRank" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Professor.Contract" class="control-label"></label>
+        <select asp-for="Professor.Contract" class="form-control">
+            @foreach (var contract in Data.Constants.Contracts)
+            {
+                <option>@contract</option>
+            }
+        </select>
+        <span asp-validation-for="Professor.Contract" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ProfessorHours.MaxHours" class="control-label"></label>
+        <input asp-for="ProfessorHours.MaxHours" class="form-control" />
+        <span asp-validation-for="ProfessorHours.MaxHours" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ProfessorHours.MinHours" class="control-label"></label>
+        <input asp-for="ProfessorHours.MinHours" class="form-control" />
+        <span asp-validation-for="ProfessorHours.MinHours" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ProfessorHours.AcademicYear" class="control-label"></label>
+        <input asp-for="ProfessorHours.AcademicYear" class="form-control"
+               value="@(DateTime.Now.Year.ToString()+"/" + ((DateTime.Now.Year+1).ToString()))"
+               id="academic-year" oninput="validate()" />
+        <span asp-validation-for="ProfessorHours.AcademicYear" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="SelectedDepartments" class="control-label"></label>
+        <select asp-items="Model.Departments" asp-for="SelectedDepartments"></select>
+        <span asp-validation-for="SelectedDepartments" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

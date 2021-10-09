@@ -1,0 +1,92 @@
+﻿@page "{semester:int}"
+@model Courses_Distribution_System.Pages.Courses.SemesterModel
+@{
+}
+
+<p>
+    <a asp-page="Create" asp-route-semester="@Model.Semester">Create New</a>
+</p>
+<div class="d-flex justify-content-between">
+    <a asp-page="./Semester" asp-route-semester="@Model.Semester" asp-route-archived="@(!(bool)ViewData["Archived"])">
+        @if ((bool)ViewData["Archived"])
+        {
+            <span>Get Courses</span>
+        }
+        else
+        {
+            <span>Get archived courses</span>
+        }
+    </a>
+    <form asp-page="Semester" asp-route-semester="@Model.Semester" method="get">
+        <div class="form-actions">
+            <p>
+                Find by code: <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" />
+                <input type="hidden" name="archived" value="@ViewData["Archived"].ToString()" />
+                <input type="submit" value="Search" class="btn btn-primary" /> |
+                <a asp-page="Semester" asp-route-semester="@Model.Semester">Back to Full List</a>
+            </p>
+        </div>
+    </form>
+</div>
+@{ string archived = (bool)ViewData["Archived"] ? "Unarchive" : "Archive";}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="Semester" asp-route-semester="@Model.Semester" asp-route-archived="@(ViewData["Archived"])" asp-route-sortOrder="@ViewData["CodeSortParm"]">
+                    @Html.DisplayNameFor(model => model.Courses[0].Code)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Courses[0].Language)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Courses[0].Credits)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Courses[0].CourseHours)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Courses[0].TpHours)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Courses[0].TdHours)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Courses)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Language)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Credits)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.CourseHours)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.TpHours)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.TdHours)
+            </td>
+            <td class="d-flex justify-content-around">
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                <form method="post" asp-route-semester="@Model.Semester">
+                    <input type="hidden" asp-for="archive" value="@item.Archived" />
+                    <input type="hidden" asp-for="id" value="@item.Id" />
+                    <button type="submit" class="btn btn-primary">
+                        @archived
+                    </button>
+                </form>
+            </td>
+        </tr>
+        }
+</table>
